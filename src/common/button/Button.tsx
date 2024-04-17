@@ -1,74 +1,47 @@
 // created by droomii in 2024/04/10
+import { useState } from 'react';
 import {
-  StyleSheet,
+  GestureResponderEvent,
   Text,
   TouchableOpacity,
   TouchableOpacityProps,
 } from 'react-native';
+
+import styles from './Button.style';
 
 interface Props extends TouchableOpacityProps {
   variant?: 'primary' | 'secondary';
   size?: 'sm' | 'md' | 'lg' | 'xl';
 }
 
-const buttonStyle = StyleSheet.create({
-  common: {
-    borderRadius: 4,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  primary: {
-    backgroundColor: '#6535de',
-  },
-  secondary: {
-    backgroundColor: '#dedede',
-  },
-  disabled: {
-    backgroundColor: '#bebebe',
-  },
-});
-
-const sizeStyle = StyleSheet.create({
-  sm: {
-    height: 24,
-  },
-  md: {
-    height: 32,
-  },
-  lg: {
-    height: 40,
-  },
-  xl: {
-    height: 48,
-  },
-});
-
-const textStyle = StyleSheet.create({
-  primary: {
-    color: 'white',
-  },
-  secondary: {
-    color: '#1e1e1e',
-  },
-  disabled: {
-    color: '#f3f3f3',
-  },
-});
-
 const Button = (props: Props) => {
-  const { variant = 'primary', size = 'md', children, ...attr } = props;
+  const {
+    variant = 'primary',
+    size = 'md',
+    children,
+    onPressIn,
+    ...attr
+  } = props;
+  const [isPressed, setIsPressed] = useState(false);
+
+  const handlePressIn = (e: GestureResponderEvent) => {
+    setIsPressed(true);
+    onPressIn?.(e);
+  };
 
   return (
     <TouchableOpacity
       style={[
-        buttonStyle.common,
-        buttonStyle[variant],
-        attr.disabled && buttonStyle.disabled,
-        sizeStyle[size],
+        styles.button.common,
+        styles.button[variant],
+        attr.disabled && styles.button.disabled,
+        styles.size[size],
+        isPressed && styles.pressed[variant],
       ]}
       activeOpacity={0.8}
+      onPressIn={handlePressIn}
       {...attr}>
-      <Text style={[textStyle[variant], attr.disabled && textStyle.disabled]}>
+      <Text style={[styles.text[variant], attr.disabled && styles.text.disabled]}>
         {children}
       </Text>
     </TouchableOpacity>
