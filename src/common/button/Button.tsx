@@ -14,7 +14,7 @@ interface Props extends TouchableOpacityProps {
   size?: 'sm' | 'md' | 'lg' | 'xl';
 }
 
-const Button = (props: Props) => {
+const ButtonBase = (props: Props) => {
   const {
     variant = 'primary',
     size = 'md',
@@ -47,5 +47,14 @@ const Button = (props: Props) => {
     </TouchableOpacity>
   );
 };
+
+const Button = Object.assign(ButtonBase, {
+  Primary: (props: Omit<Props, 'variant'>) => (
+    <ButtonBase {...props} variant="primary" />
+  ),
+  Secondary: (props: Omit<Props, 'variant'>) => (
+    <ButtonBase {...props} variant="secondary" />
+  ),
+});
 
 export default Button;
